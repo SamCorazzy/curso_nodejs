@@ -10,7 +10,7 @@
     };
     const usuarioPut = (req=request,res=response) => {
         const {id} = req.params;
-        res.status(400).json({msg:"Hola Samuel!!! >.< PUT"}, id);
+        res.status(400).json({msg:"Hola Samuel!!! >.< PUT", id});
    };
    const usuarioDelete = (req=request,res=response) => {
        const {usuario, password} = req.query;
