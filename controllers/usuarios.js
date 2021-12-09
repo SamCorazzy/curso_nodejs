@@ -1,3 +1,4 @@
+    const bcryptjs = require("bcryptjs");
     const {request, response} = require("express");
     const pool = require("../db/conexion");
     const usuarioQueries = require("../models/usuarios");
@@ -31,24 +32,27 @@
 
     let conn;
 
-        try{
-            conn = await pool.getConnection();
+    try{
+        const salt = bcryptjs.genSaltSync();
+        const passwordHash = bcryptjs.hashSync(password, salt);
 
-            const usuarios = await conn.query(usuarioQueries.insertUsuario,[
-                nombre, 
-                email, 
-                password, 
-                status]);
+        conn = await pool.getConnection();
 
-            res.json({ usuarios });
-        }catch (error){
-            console.log(error);
-            res
-                .status(500)
-                .json({ msg: "Por favor contacte al administrador.", error });
-        }finally{
-            if (conn) conn.end();
-        } 
+        const usuarios = await conn.query(usuarioQueries.insertUsuario,[
+            nombre, 
+            email, 
+            passwordHash, 
+            status]);
+
+        res.json({ usuarios });
+    }catch (error){
+        console.log(error);
+        res
+            .status(500)
+            .json({ msg: "Por favor contacte al administrador.", error });
+    }finally{
+        if (conn) conn.end();
+    } 
 
     };
 
@@ -102,5 +106,8 @@
         }
 
     };
+
+
+    //tarea: Hacer un endpoint para actualizar la contraseña
 
     module.exports = {usuarioGet, usuarioPost,usuarioPut,usuarioDelete}
