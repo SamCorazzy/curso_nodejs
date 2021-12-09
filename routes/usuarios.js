@@ -13,6 +13,6 @@
 
     router.get('/', usuarioGet);
     router.post('/', usuarioPost);
-    router.put('/:id', usuarioPut);
+    router.put('/', usuarioPut);
     router.delete('/', usuarioDelete);
     module.exports = router;
